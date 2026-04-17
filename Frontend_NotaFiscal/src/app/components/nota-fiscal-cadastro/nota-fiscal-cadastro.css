@@ -1,0 +1,86 @@
+/* Seleciona tanto os campos de texto quanto os de seleção */
+.form-control {
+  transition: all 0.3s ease; /* Faz o efeito ser suave e não um "susto" */
+}
+
+/* Quando o mouse passar por cima da caixinha */
+.form-control:hover {
+  transform: scale(1.03); /* Aumenta 3% do tamanho */
+  border-color: #28a745;  /* Já dá uma bordinha verde pra dar um charme */
+  cursor: pointer;        /* Muda o desenho do mouse */
+}
+
+/* Quando o usuário CLICAR dentro (Focus) */
+.form-control:focus {
+  transform: scale(1.05); /* Aumenta um pouquinho mais quando está digitando */
+  border-color: #218838;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.4); /* Brilho verde em volta */
+  outline: none;
+}
+
+.info-estatica {
+  padding: 8px 12px;
+  background-color: #f1f3f5; /* Um cinza bem clarinho */
+  border-radius: 6px;
+  font-weight: bold;
+  color: #2b3035;
+  display: inline-block;
+  min-width: 80px;
+}
+
+/*Estilizar o label para ficar mais profissional */
+label.text-muted {
+  display: block;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.caixanota1{
+  background-color: #8db0bb !important; /* Esse !important força a cor a aparecer */
+  display: block !important;
+  min-height: 100px;
+
+}
+
+.caixanota2{
+  background-color: #8db0bb !important; /* Esse !important força a cor a aparecer */
+  display: block !important;
+  min-height: 100px;
+
+}
+
+.botao_salvar_nota{
+  background-color: #6ab62c !important; /* A cor que você escolher */
+  border-radius: 8px;                   /* Arredonda do seu jeito */
+  padding: 10px 25px;                   /* Deixa ele mais gordinho ou elegante */
+  color: white !important;              /* Cor da letra */
+  font-weight: bold;
+  transition: all 0.3s ease;            /* Para o efeito de hover ficar suave */
+  margin-left:580px;
+  margin-bottom: 30px;
+}
+
+.botao_salvar_nota:hover {
+    background-color: #218838 !important;
+    transform: scale(1.05); /* Aquele efeito de crescer*/
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.botao_imprimir{
+  margin-left:670px;
+  margin-bottom: 30px;
+}
+
+.btn-outline-danger {
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.btn-outline-danger:hover {
+    transform: scale(1.1); /* Aumenta um pouquinho ao passar o mouse */
+    background-color: #dc3545;
+    color: white;
+}

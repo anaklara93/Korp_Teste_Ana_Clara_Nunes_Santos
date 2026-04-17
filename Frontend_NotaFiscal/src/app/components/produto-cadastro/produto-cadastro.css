@@ -1,0 +1,73 @@
+/* Seleciona tanto os campos de texto quanto os de seleção */
+.form-control {
+  transition: all 0.3s ease; /* Faz o efeito ser suave e não um "susto" */
+}
+
+/* Quando o mouse passar por cima da caixinha */
+.form-control:hover {
+  transform: scale(1.03); /* Aumenta 3% do tamanho */
+  border-color: #28a745;  /* Já dá uma bordinha verde pra dar um charme */
+  cursor: pointer;        /* Muda o desenho do mouse */
+}
+
+/* Quando o usuário CLICAR dentro (Focus) */
+.form-control:focus {
+  transform: scale(1.05); /* Aumenta um pouquinho mais quando está digitando */
+  border-color: #218838;
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.4); /* Brilho verde em volta */
+  outline: none;
+}
+
+.caixa1 {
+  background-color: #8db0bb !important; /* Esse !important força a cor a aparecer */
+  display: block !important;
+  min-height: 100px;
+}
+
+/* Isso pinta o fundo de cada buraquinho da tabela */
+.tabela1 th, .tabela1 td {
+  background-color: #90afbc !important; 
+  color: rgb(0, 0, 0) !important; /* Aproveita e deixa o texto branco pra ler melhor */
+}
+
+.tabela1 {
+  width: 100% !important;
+  background-color: #90afbc !important;
+  
+  /* 1. O segredo para o arredondamento funcionar */
+  border-collapse: separate; 
+  border-spacing: 0;
+  overflow: hidden;
+  border-radius: 15px; /* Ajuste o tamanho do arredondamento aqui */
+  
+  /* 2. Uma bordinha pra destacar o arredondamento */
+  border: 1px solid #7a97a5; 
+}
+
+/* 3. Precisamos arredondar os cantos das células das pontas também */
+/* Canto superior esquerdo */
+.tabela1 th:first-child {
+  border-top-left-radius: 15px;
+}
+
+/* Canto superior direito */
+.tabela1 th:last-child {
+  border-top-right-radius: 15px;
+}
+
+/* Canto inferior esquerdo */
+.tabela1 tr:last-child td:first-child {
+  border-bottom-left-radius: 15px;
+}
+
+/* Canto inferior direito */
+.tabela1 tr:last-child td:last-child {
+  border-bottom-right-radius: 15px;
+}
+
+/* Garante que a tabela ocupe a largura toda */
+.tabela1 {
+  width: 100% !important;
+  border-collapse: collapse;
+  background-color: #90afbc !important;
+}

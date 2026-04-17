@@ -1,0 +1,92 @@
+<div class="container mt-4">
+  <h2>Cadastro de Nota Fiscal</h2>
+
+  <div class="card p-3 mb-3 caixanota1">
+    <div class="row">
+      <div class="col-md-4">
+        <label class="text-muted small">Número da Nota:</label>
+        <div class="info-estatica">{{ novaNota.numero }}</div>
+      </div>
+      <div class="col-md-4">
+        <label class="text-muted small">Status:</label>
+        <div>
+          <span [ngClass]="{
+            'badge bg-info': novaNota.status === 'Aberta',
+            'badge bg-success': novaNota.status === 'Fechada'
+        }" class="p-2">
+            {{ novaNota.status }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card p-3 mb-3 caixanota2">
+    <h4>Adicionar Itens</h4>
+    <div class="row">
+      <div class="col-md-6">
+        <label>Produto:</label>
+        <select class="form-control" [(ngModel)]="itemAtual.produtoId">
+          <option [ngValue]="0">Selecione um produto...</option>
+          <option *ngFor="let p of produtos" [ngValue]="p.id"> {{ p.descricao }} (Saldo: {{ p.saldo }})
+          </option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label>Quantidade:</label>
+        <input type="number" class="form-control" [(ngModel)]="itemAtual.quantidade" min="1"
+          oninput="validity.valid||(value='');">
+      </div>
+      <div class="col-md-3 d-flex align-items-end">
+        <button class="btn btn-success w-100" (click)="adicionarItem()"
+          [disabled]="itemAtual.quantidade <= 0 || itemAtual.produtoId == 0"> + Adicionar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <table class="table table-striped tabela2" *ngIf="novaNota.itens.length > 0">
+    <thead>
+      <tr>
+        <th>ID Produto</th>
+        <th>Quantidade</th>
+        <th> Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of novaNota.itens; let i = index">
+        <td>{{ item.produtoId }}</td>
+        <td>{{ item.quantidade }}</td>
+        <td>
+          <button class="btn btn-outline-danger btn-sm" (click)="removerItem(i)">
+            <i class="bi bi-trash"></i> Excluir
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-4 border-top pt-3">
+
+    <button *ngIf="!notaSalvaId" class="btn btn-primary btn-lg botao_salvar_nota" (click)="salvar()">
+      💾 1. Salvar Nota como Aberta
+    </button>
+
+    <button *ngIf="notaSalvaId && novaNota.status === 'Aberta'" class="btn btn-warning btn-lg mt-2 botao_imprimir"
+      (click)="imprimir()" [disabled]="imprimindo">
+
+      <span *ngIf="imprimindo" class="spinner-border spinner-border-sm me-2"></span>
+      {{ imprimindo ? 'Processando Impressão...' : '🖨️ 2. Imprimir e Finalizar' }}
+    </button>
+
+    <div *ngIf="novaNota.status === 'Fechada'" class="alert alert-success mt-3 p-4 text-center shadow">
+      <h4 class="alert-heading">✅ Nota Fiscal Finalizada com Sucesso!</h4>
+      <p>O status foi alterado para <strong>Fechada</strong> e o estoque foi devidamente atualizado no sistema.</p>
+      <hr>
+      <button class="btn btn-success btn-lg" (click)="novaVenda()">
+        ➕ Criar Nova Nota
+      </button>
+    </div>
+
+  </div>
+</div>
