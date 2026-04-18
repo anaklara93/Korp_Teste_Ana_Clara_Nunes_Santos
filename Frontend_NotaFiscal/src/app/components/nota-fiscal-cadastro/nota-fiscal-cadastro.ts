@@ -135,6 +135,7 @@ export class NotaFiscalCadastroComponent implements OnInit {
     // Limpa tudo para a próxima nota
     this.novaNota = { numero: 0, status: 'Aberta', itens: [] };
     this.notaSalvaId = null;
+    this.carregarProdutos();
     this.buscarProximoNumero(); // Já puxa o próximo número automático
     this.cdr.detectChanges();
   }

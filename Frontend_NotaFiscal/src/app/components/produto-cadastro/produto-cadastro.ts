@@ -65,4 +65,15 @@ export class ProdutoCadastroComponent implements OnInit {
       }
     });
   }
+  deletarProduto(id: number) {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+      this.produtoService.excluir(id).subscribe({
+        next: () => {
+          alert('Produto excluído com sucesso!');
+          this.listar(); // Chama a função que atualiza a lista na tela
+        },
+        error: (err) => alert('Erro ao excluir produto!')
+      });
+    }
+  }
 }

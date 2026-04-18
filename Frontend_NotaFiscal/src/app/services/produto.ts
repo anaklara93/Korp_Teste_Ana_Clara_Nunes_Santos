@@ -34,4 +34,7 @@ export class ProdutoService {
     // Esse método envia apenas o número (ex: 1) para a nova rota do C#
     return this.http.put(`${this.apiUrl}/${id}/baixar`, quantidade);
   }
+  excluir(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }
