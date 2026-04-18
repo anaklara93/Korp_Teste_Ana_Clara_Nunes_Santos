@@ -100,45 +100,37 @@ export class NotaFiscalCadastroComponent implements OnInit {
     });
   }
 
-  imprimir() {
-    if (this.novaNota.status !== 'Aberta') return;
-    this.imprimindo = true;
+ imprimir() {
+  if (this.novaNota.status !== 'Aberta') return;
+  this.imprimindo = true;
 
-    setTimeout(() => {
-      this.novaNota.status = 'Fechada';
+  setTimeout(() => {
+    this.novaNota.status = 'Fechada';
 
-      this.novaNota.itens.forEach(item => {
-        let p = this.produtos.find(prod => prod.id == item.produtoId);
-
-        if (!p) {
-          p = this.produtos.find(prod => prod.codigo == item.produtoId.toString());
-        }
-
-        if (p) {
-          // 1. Atualizamos o saldo na nossa lista LOCAL primeiro (para a tela mudar na hora)
-          p.saldo -= item.quantidade;
-
-          const produtoAtualizado = { ...p };
-
-          // 2. Avisamos o servidor
-          this.produtoService.atualizar(produtoAtualizado).subscribe({
-            next: () => {
-              console.log("Sucesso no banco!");
-            },
-            error: (err) => {
-              console.error("Erro ao atualizar saldo no banco:", err);
-              // Se der erro no banco, você "devolve" o saldo no local para não mentir pro usuário
-              p.saldo += item.quantidade;
-            }
-          });
+    this.novaNota.itens.forEach(item => {
+      // 1. Chamamos o novo método que criamos no serviço
+      // Passamos o ID e apenas a QUANTIDADE que queremos tirar
+      this.produtoService.baixarEstoque(item.produtoId, item.quantidade).subscribe({
+        next: () => {
+          console.log(`Sucesso: Estoque do produto ${item.produtoId} baixado!`);
+          
+          // Atualiza a lista local apenas para a tela refletir a mudança
+          let p = this.produtos.find(prod => prod.id == item.produtoId);
+          if (p) p.saldo -= item.quantidade;
+        },
+        error: (err) => {
+          console.error("ERRO DE CONCORRÊNCIA OU SALDO:", err);
+          // Aqui é onde a mágica acontece: se o C# retornar BadRequest (saldo < 0),
+          // ele cai aqui e você pode avisar o usuário.
+          alert(`Não foi possível baixar o estoque do item ${item.produtoId}. Saldo insuficiente ou erro de concorrência!`);
         }
       });
+    });
 
-      this.imprimindo = false;
-      this.cdr.detectChanges(); // Isso força o Angular a atualizar o HTML
-    }, 2000);
-  }
-
+    this.imprimindo = false;
+    this.cdr.detectChanges(); 
+  }, 2000);
+}
   novaVenda() {
     // Limpa tudo para a próxima nota
     this.novaNota = { numero: 0, status: 'Aberta', itens: [] };

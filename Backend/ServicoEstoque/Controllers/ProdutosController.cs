@@ -29,31 +29,56 @@ public class ProdutosController : ControllerBase
         await _context.SaveChangesAsync();
         return Ok(produto);
     }
-
-    // PUT: api/produtos/{id} (Atualiza o produto, inclusive o saldo)
     [HttpPut("{id}")]
-public async Task<IActionResult> PutProduto(int id, Produto produto)
-{
-    // LOG DE EMERGÊNCIA: Isso vai aparecer no seu terminal preto do VS Code
-    Console.WriteLine($"\n---> RECEBI CHAMADA PARA ATUALIZAR ID: {id}");
-    Console.WriteLine($"---> SALDO ENVIADO: {produto.Saldo}");
-
-    // Forçamos o ID que veio na URL para dentro do objeto (evita erro de Id vs id)
-    produto.Id = id; 
-
-    // Avisa o banco que esse objeto mudou
-    _context.Entry(produto).State = EntityState.Modified;
-
-    try
+    public async Task<IActionResult> PutProduto(int id, Produto produtoEnviado)
     {
+        // Buscamos o produto no banco
+        var produtoNoBanco = await _context.Produtos.FirstOrDefaultAsync(p => p.Id == id);
+
+        if (produtoNoBanco == null) return NotFound();
+
+        // CALCULA A DIFERENÇA (Ajuste 'Saldo' para o nome que está no seu Model)
+        int quantidadeVendida = produtoNoBanco.Saldo - produtoEnviado.Saldo;
+
+        // TRAVA DE SEGURANÇA
+        if (produtoNoBanco.Saldo < quantidadeVendida)
+        {
+            return BadRequest("Saldo insuficiente!");
+        }
+
+        // ATUALIZAÇÃO
+        produtoNoBanco.Saldo -= quantidadeVendida;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            return BadRequest(ex.Message);
+        }
+    }
+
+    [HttpPut("{id}/baixar")]
+    public async Task<IActionResult> BaixarEstoque(int id, [FromBody] int quantidadeParaTirar)
+    {
+        // 1. Busca o produto direto no banco de dados
+        var produtoNoBanco = await _context.Produtos.FindAsync(id);
+
+        if (produtoNoBanco == null) return NotFound("Produto não encontrado.");
+
+        // 2. A TRAVA DE SEGURANÇA (Opcional A):
+        // Verificamos o saldo real do banco contra a quantidade pedida
+        if (produtoNoBanco.Saldo < quantidadeParaTirar)
+        {
+            return BadRequest("Estoque insuficiente para esta operação!");
+        }
+
+        // 3. Subtrai e salva
+        produtoNoBanco.Saldo -= quantidadeParaTirar;
         await _context.SaveChangesAsync();
-        Console.WriteLine("---> SUCESSO: Banco de dados atualizado no arquivo .db!\n");
+
         return NoContent();
     }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"---> ERRO NO C#: {ex.Message}\n");
-        return BadRequest(ex.Message);
-    }
-}
 }

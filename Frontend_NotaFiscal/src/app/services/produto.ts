@@ -13,7 +13,7 @@ export interface Produto {
   providedIn: 'root'
 })
 export class ProdutoService {
-  
+
   private apiUrl = 'http://localhost:5077/api/Produtos';
 
   constructor(private http: HttpClient) { }
@@ -29,5 +29,9 @@ export class ProdutoService {
   atualizar(produto: Produto): Observable<any> {
     // O PUT serve para atualizar o objeto inteiro no banco
     return this.http.put(`${this.apiUrl}/${produto.id}`, produto);
+  }
+  baixarEstoque(id: number, quantidade: number): Observable<any> {
+    // Esse método envia apenas o número (ex: 1) para a nova rota do C#
+    return this.http.put(`${this.apiUrl}/${id}/baixar`, quantidade);
   }
 }
